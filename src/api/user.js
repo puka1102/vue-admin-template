@@ -14,7 +14,12 @@ export function getUserInfo(token) {
     method: 'post'
   })
 }
-
+// 获取用户头像
+export function getUserPhoto(id) {
+  return request({
+    url: `/sys/user/${id}`
+  })
+}
 export function logout() {
 
 }

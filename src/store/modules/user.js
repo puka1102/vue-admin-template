@@ -1,5 +1,5 @@
-import { login, getUserInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, getUserInfo, getUserPhoto } from '@/api/user'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 // import { resolve } from 'core-js/library/es6/promise'
 // 状态
@@ -24,7 +24,7 @@ const mutations = {
     state.userInfo = result // 响应式
   },
   // 删除用户信息，退出登录时需要
-  removerUserInfo(state) {
+  removeUserInfo(state) {
     state.userInfo = {}
   }
 
@@ -36,12 +36,23 @@ const actions = {
     const result = await login(data)
     // 通过mutations修改state
     context.commit('setToken', result)
+    // 写入时间戳
+    setTimeStamp()
   },
   // 获取用户资料
   async getUserInfo(context) {
     const result = await getUserInfo()
-    context.commit('setUserInfo', result)
+    // 获取用户头像
+    const userPhoto = await getUserPhoto(result.userId)
+    context.commit('setUserInfo', { ...result, ...userPhoto }) // 传入合并后的数据
     return result // 做权限时需要
+  },
+  // 登出操作
+  logout(context) {
+    // 删除token
+    context.commit('removeToken')
+    // 删除用户资料
+    context.commit('removeUserInfo')
   }
 
 }
