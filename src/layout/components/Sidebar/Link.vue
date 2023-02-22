@@ -34,7 +34,7 @@ export default {
           rel: 'noopener'
         }
       }
-      console.log(to)
+
       return {
 
         to: to

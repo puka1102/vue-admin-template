@@ -115,3 +115,21 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+/**
+ * 递归算法，将列表转换成树形结构
+ * */
+export function transListToTreeData(list, rootValue) {
+  var arr = []
+  list.forEach((item) => {
+    if (item.pid === rootValue) {
+      const children = transListToTreeData(list, item.id) // 列表不一定按顺序排列，所以还是遍历整个数组
+      if (children.length) {
+        // 如果找到了子节点
+        item.children = children
+      }
+      arr.push(item) // 无论其是否有子节点，都要加入到最后的列表中
+    }
+  })
+  return arr
+}
