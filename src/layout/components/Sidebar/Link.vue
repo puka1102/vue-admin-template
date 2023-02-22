@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     isExternal() {
-      return isExternal(this.to)
+      return isExternal()
     },
     type() {
       if (this.isExternal) {
@@ -34,10 +34,13 @@ export default {
           rel: 'noopener'
         }
       }
+      console.log(to)
       return {
+
         to: to
       }
     }
   }
 }
 </script>
+

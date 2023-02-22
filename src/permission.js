@@ -12,10 +12,10 @@ router.beforeEach(async(to, from, next) => {
       next('/')										// 有token可以跳过登录页面
     } else {
       // 判断是否有用户id
-      if (!store.getters.userId) {
+      if (!store.getters.userId) { // 没有用户id，说明没有获取过用户资料，就要先获取
         await store.dispatch('user/getUserInfo')
-        next() // 有token可以放行
       }
+      next() // 有用户id就放行
     }
   } else {
     if (whiteList.indexOf(to.path) > -1) {
