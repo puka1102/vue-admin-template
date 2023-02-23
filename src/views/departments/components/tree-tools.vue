@@ -10,14 +10,14 @@
         <el-col>{{ treeNode.manager }}</el-col>
         <el-col>
           <!-- 下拉菜单 -->
-          <el-dropdown>
+          <el-dropdown @command="operDepts">
             <span>
               操作<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>添加子部门</el-dropdown-item>
+              <el-dropdown-item command="add">添加子部门</el-dropdown-item>
               <el-dropdown-item v-if="!isRoot">编辑部门</el-dropdown-item>
-              <el-dropdown-item v-if="!isRoot">删除部门</el-dropdown-item>
+              <el-dropdown-item v-if="!isRoot" command="delete">删除部门</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -26,6 +26,8 @@
   </el-row>
 </template>
 <script>
+import { delDepartments } from '@/api/department'
+
 export default {
   // 对外开放属性
   props: {
@@ -36,6 +38,33 @@ export default {
     isRoot: {
       type: Boolean,
       default: false
+    }
+  },
+  // 方法
+  methods: {
+    operDepts(type) {
+      switch (type) {
+        case 'delete':
+          this.$confirm('确定要删除吗', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              return delDepartments(this.treeNode.id)
+            }).then(() => {
+              // 需要通知父组件去重新获取数据
+              this.$emit('delDepts') // 触发自定义事件
+              this.$message.success('删除成功！')
+            })
+          break
+          // 添加部门
+        case 'add':
+          this.$emit('addDepts', this.treeNode) // 触发自定义事件，传递参数
+          break
+        default:
+          break
+      }
     }
   }
 }
