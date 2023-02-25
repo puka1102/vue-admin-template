@@ -17,8 +17,24 @@ export function delDepartments(id) {
 // 添加子部门
 export function addDepartments(data) {
   return request({
-    url: '',
+    url: '/company/department',
     method: 'post',
+    data
+  })
+}
+// 获取部门详情
+export function getDepartDetail(id) {
+  return request({
+    url: `/company/department/${id}`,
+    method: 'get'
+  })
+}
+
+// 更新部门详情
+export function updateDepartment(data) {
+  return request({
+    url: `/company/department/${data.id}`,
+    method: 'put',
     data
   })
 }

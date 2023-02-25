@@ -16,7 +16,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="add">添加子部门</el-dropdown-item>
-              <el-dropdown-item v-if="!isRoot">编辑部门</el-dropdown-item>
+              <el-dropdown-item v-if="!isRoot" command="edit">编辑部门</el-dropdown-item>
               <el-dropdown-item v-if="!isRoot" command="delete">删除部门</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -60,7 +60,11 @@ export default {
           break
           // 添加部门
         case 'add':
-          this.$emit('addDepts', this.treeNode) // 触发自定义事件，传递参数
+          this.$emit('addDepts', this.treeNode) // 触发自定义事件，传递参数，this.treeNode是当前点击的部门
+          break
+          // 编辑部门
+        case 'edit':
+          this.$emit('editDepts', this.treeNode)
           break
         default:
           break
