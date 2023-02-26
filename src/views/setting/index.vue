@@ -126,6 +126,7 @@ export default {
           type: 'warning'
         })
         await deleteRole(id)
+        this.getRoleList() // 删除角色后重新拉取数据
         this.$message.success('删除角色成功！')
       } catch (error) {
         this.$message.error(error)
