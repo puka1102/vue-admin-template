@@ -7,8 +7,8 @@
           共{{ page.total }}条信息
         </template>
         <template #after>
-          <el-button size="small" type="warning">excel导入</el-button>
-          <el-button size="small" type="danger">excel导出</el-button>
+          <el-button size="small" type="warning" @click="$router.push('/import')">excel导入</el-button>
+          <el-button size="small" type="danger" @click="exportData">excel导出</el-button>
           <el-button size="small" type="primary" icon="plus" @click="showDialog=true">新增员工</el-button>
         </template>
       </page-tools>
@@ -66,6 +66,8 @@
 import { getEmployees, delEmployee } from '@/api/employees'
 import AddEmployee from './components/add-employee.vue'
 import EmployeeEnum from '@/api/constant/employees'
+import { formatDate } from '@/filters'
+
 export default {
   components: {
     AddEmployee
@@ -117,6 +119,52 @@ export default {
       } catch (error) {
         this.$message.error(error)
       }
+    },
+    // 转化成二维数组格式
+    formatJson(headers, rows) {
+      const data = rows.map(item => {
+        return headers.map(header => {
+          // 需要判断字段
+          if (header === 'timeOfEntry' || header === 'correctionTime') {
+            return formatDate(item[header])
+          } else if (header === 'formOfEmployment') {
+            var type = EmployeeEnum.hireType.find(obj => obj.id === item[header])
+            return type ? type.value : '未知'
+          } else {
+            return item[header]
+          }
+        })
+      })
+      return data
+    },
+    // 导出excel
+    exportData() {
+      // 使用懒加载
+      import('@/vendor/Export2Excel').then(async excel => {
+        // 把表头转换为中文
+        const headers = {
+          '手机号': 'mobile',
+          '姓名': 'username',
+          '入职日期': 'timeOfEntry',
+          '转正日期': 'correctionTime',
+          '聘用形式': 'formOfEmployment',
+          '工号': 'workNumber',
+          '部门': 'departmentName'
+        }
+        // 获取所有员工的数据
+        const { rows } = await getEmployees({ page: 1, size: this.page.total })
+        const data = this.formatJson(Object.values(headers), rows)
+        const multiHeader = [['姓名', '主要信息', '', '', '', '', '部门']]
+        const merges = ['A1:A2', 'B1:F1', 'G1:G2']
+
+        excel.export_json_to_excel({
+          header: Object.keys(headers),
+          data,
+          filename: '员工工资表',
+          multiHeader, // 复杂表头
+          merges // 合并选项
+        })
+      })
     }
   }
 }

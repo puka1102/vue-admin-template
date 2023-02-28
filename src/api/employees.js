@@ -32,3 +32,12 @@ export function addEmployee(data) {
     data
   })
 }
+
+// excel批量导入员工
+export function importEmployee(data) {
+  return request({
+    url: '/sys/user/batch',
+    method: 'post',
+    data
+  })
+}
