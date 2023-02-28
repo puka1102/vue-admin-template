@@ -11,6 +11,15 @@ export default {
       meta: {
         title: '员工管理',
         icon: 'people'
-      }} // 左侧导航会读取这里的title作为显示菜单名称
+      }
+    }, // 左侧导航会读取这里的title作为显示菜单名称
+    {
+      path: 'detail/:id', // 动态路由
+      component: () => import('@/views/employees/detail'),
+      hidden: true,
+      meta: {
+        title: '员工详情'
+      }
+    }
   ]
 }

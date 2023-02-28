@@ -21,5 +21,20 @@ export function getUserPhoto(id) {
   })
 }
 export function logout() {
+}
 
+// 获取某个用户的基本信息
+export function getUserDetail(id) {
+  return request({
+    url: `/sys/user/${id}`
+  })
+}
+
+// 保存用户的基本信息
+export function saveUserDetail(data) {
+  return request({
+    url: `/sys/user/${data.id}`,
+    method: 'put',
+    data
+  })
 }

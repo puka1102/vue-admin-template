@@ -36,7 +36,7 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="240">
             <template slot-scope="{row}">
-              <el-button type="text" size="small">查看</el-button>
+              <el-button type="text" size="small" @click="$router.push(`/employees/detail/${row.id}`)">查看</el-button>
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
@@ -154,7 +154,7 @@ export default {
         // 获取所有员工的数据
         const { rows } = await getEmployees({ page: 1, size: this.page.total })
         const data = this.formatJson(Object.values(headers), rows)
-        const multiHeader = [['姓名', '主要信息', '', '', '', '', '部门']]
+        const multiHeader = [['姓名', '主要信息', '', '', '', '', '部门']] // 注意合并列要写空号占位
         const merges = ['A1:A2', 'B1:F1', 'G1:G2']
 
         excel.export_json_to_excel({
