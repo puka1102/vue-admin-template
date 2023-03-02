@@ -18,8 +18,16 @@
         <el-table :data="employeeList">
           <el-table-column label="序号" type="index" sortable="" />
           <el-table-column label="姓名" prop="username" sortable="" />
-          <el-table-column label="头像">
-            <img src="staffPhoto" alt="">
+          <el-table-column label="头像" width="120px">
+            <template slot-scope="{row}">
+              <img
+                v-imagerror="require('@/assets/common/bigUserHeader.png')"
+                :src="row.staffPhoto"
+                alt=""
+                style="border-radius: 50%; width: 100px; height: 100px; padding: 10px"
+                @click="showQrCode(row.staffPhoto)"
+              >
+            </template>
           </el-table-column>
           <el-table-column label="工号" prop="workNumber" sortable="" />
           <el-table-column label="聘用形式" prop="formOfEmployment" sortable="" :formatter="formatEmployment" />
@@ -55,8 +63,18 @@
             @current-change="changePage"
           />
         </el-row>
-        <!-- 弹层 -->
+        <!-- 新增员工弹层 -->
         <add-employee :show-dialog.sync="showDialog" @add-employee="getEmployees" />
+        <!-- 二维码弹层 -->
+        <el-dialog
+          title="二维码"
+          :visible.sync="showCodeDialog"
+        >
+          <el-row type="flex" justify="center">
+            <canvas ref="myCanvas" />
+          </el-row>
+
+        </el-dialog>
       </el-card>
     </div>
   </div>
@@ -67,7 +85,7 @@ import { getEmployees, delEmployee } from '@/api/employees'
 import AddEmployee from './components/add-employee.vue'
 import EmployeeEnum from '@/api/constant/employees'
 import { formatDate } from '@/filters'
-
+import QrCode from 'qrcode'
 export default {
   components: {
     AddEmployee
@@ -81,7 +99,8 @@ export default {
         total: 0
       },
       loading: false,
-      showDialog: false
+      showDialog: false,
+      showCodeDialog: false
     }
   },
   created() {
@@ -165,6 +184,19 @@ export default {
           merges // 合并选项
         })
       })
+    },
+    // 显示二维码
+    showQrCode(url) {
+      if (url) {
+        console.log(url)
+        this.showCodeDialog = true
+        // 页面渲染是异步的，不能确保有ref对象
+        this.$nextTick(() => {
+          QrCode.toCanvas(this.$refs.myCanvas, url) // 降低至转化为二维码
+        })
+      } else {
+        this.$message.warning('该用户还未上传头像')
+      }
     }
   }
 }

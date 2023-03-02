@@ -69,7 +69,7 @@ export default {
       formData: { // 不要偷懒，一开始各项属性要写好
         username: '',
         mobile: '',
-        formOfEmployment: '',
+        formOfEmployment: null,
         workNumber: '',
         departmentName: '',
         timeOfEntry: '',
@@ -121,7 +121,7 @@ export default {
       this.formData = {
         username: '',
         mobile: '',
-        formOfEmployment: '',
+        formOfEmployment: null,
         workNumber: '',
         departmentName: '',
         timeOfEntry: '',

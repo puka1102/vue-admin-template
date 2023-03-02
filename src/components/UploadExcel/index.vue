@@ -15,6 +15,7 @@
 
 <script>
 import XLSX from 'xlsx'
+
 export default {
   props: {
     beforeUpload: Function, // eslint-disable-line
