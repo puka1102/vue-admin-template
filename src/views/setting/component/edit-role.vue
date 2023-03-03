@@ -77,6 +77,6 @@ export default {
 </script>
 <style scoped>
 .el-input{
-	width:400px
+	width:80%
 }
 </style>

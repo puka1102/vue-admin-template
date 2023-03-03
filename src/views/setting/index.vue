@@ -149,6 +149,6 @@ export default {
 
 <style scoped>
 .el-input{
-	width:400px !important
+	width:80% !important
 }
 </style>
