@@ -18,7 +18,7 @@
               <el-table-column label="操作">
                 <!-- 作用域插槽 -->
                 <template slot-scope="{row}">
-                  <el-button size="mini" type="success">分配权限</el-button>
+                  <el-button size="mini" type="success" @click="assignPerm(row.id)">分配权限</el-button>
                   <el-button size="mini" type="primary" @click="showDetail(row.id)">编辑</el-button>
                   <el-button size="mini" type="danger" @click="deleteRole(row.id)">删除</el-button>
                 </template>
@@ -63,7 +63,10 @@
         </el-tabs>
       </el-card>
     </div>
+    <!-- 编辑权限弹窗 -->
     <edit-role ref="editRole" :show-dialog.sync="showDialog" @addRole="getRoleList" />
+    <!-- 分配权限弹窗 -->
+    <assign-perm ref="AssignPerm" :show-perm-dialog.sync="showPermDialog" :user-id="userId" />
   </div>
 </template>
 
@@ -71,9 +74,11 @@
 import { getRoleList, getCompanyInfo, deleteRole } from '@/api/setting'
 import { mapGetters } from 'vuex'
 import editRole from './component/edit-role.vue'
+import AssignPerm from './component/assign-perm.vue'
 export default {
   components: {
-    editRole
+    editRole,
+    AssignPerm
   },
   data() {
     return {
@@ -88,7 +93,9 @@ export default {
       companyInfo: {},
       showDialog: false, // 控制对话框显示
       roleId: ' ', // 编辑的id
-      loading: false
+      loading: false,
+      showPermDialog: false,
+      userId: ''
     }
   },
   computed: {
@@ -141,6 +148,12 @@ export default {
     // 点击新增角色
     addRole() {
       this.showDialog = true
+    },
+    // 点击分配权限
+    assignPerm(id) {
+      this.showPermDialog = true
+      this.$refs.AssignPerm.getPermissionList(id) // props传值是异步的
+      this.userId = id
     }
 
   }

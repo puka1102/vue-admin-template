@@ -13,9 +13,16 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // 判断是否有用户id
       if (!store.getters.userId) { // 没有用户id，说明没有获取过用户资料，就要先获取
-        await store.dispatch('user/getUserInfo')
+        const { roles } = await store.dispatch('user/getUserInfo')
+        // 筛选用户的可用路由
+        const routes = await store.dispatch('permission/filterRoutes', roles.menus) // 传参
+        // routes是动态路由，需要添加到路由表中，addRoutes是router实例的方法
+        console.log(routes)
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }]) // 404必须放到最后
+        next(to.path) // 重定向了一次
+      } else {
+        next() // 有用户id就放行
       }
-      next() // 有用户id就放行
     }
   } else {
     if (whiteList.indexOf(to.path) > -1) {

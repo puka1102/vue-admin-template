@@ -47,10 +47,9 @@ export const constantRoutes = [
       path: '', // 表示二级默认路由，
       component: () => import('@/views/import')
     }]
-  },
+  }
 
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // 404 page must be placed at the end !!! 所以加到动态路由最后
 ]
 // 动态路由
 export const asyncRoutes = [
@@ -67,15 +66,16 @@ const createRouter = () => new Router({
   mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
 
-  routes: [...constantRoutes, ...asyncRoutes] // 临时合并所有的路由
+  routes: [...constantRoutes] // 临时合并所有的路由
 })
 console.log(asyncRoutes)
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+// 重置路由
 export function resetRouter() {
   const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  router.matcher = newRouter.matcher // 换成新实例的路由
 }
 
 export default router

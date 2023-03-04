@@ -2,7 +2,7 @@ import Layout from '@/layout'
 
 export default {
   path: '/departments',
-  // name: 'departments',
+  name: 'departments',
   component: Layout,
   // 配置二级路由组件
   children: [

@@ -1,6 +1,6 @@
 import { login, getUserInfo, getUserPhoto } from '@/api/user'
 import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
-// import { resetRouter } from '@/router'
+import { resetRouter } from '@/router'
 // import { resolve } from 'core-js/library/es6/promise'
 // 状态
 const state = {
@@ -53,6 +53,10 @@ const actions = {
     context.commit('removeToken')
     // 删除用户资料
     context.commit('removeUserInfo')
+    // 重置路由
+    resetRouter()
+    // 重置权限模块下的路由
+    context.commit('permission/setRoutes', [], { root: true }) // 调用根级的子模块
   }
 
 }

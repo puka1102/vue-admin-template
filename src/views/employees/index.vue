@@ -49,7 +49,7 @@
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
               <el-button type="text" size="small" @click="editRole(row.id)">角色</el-button>
-              <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
+              <el-button v-if="checkPermission('delEmployees')" type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
