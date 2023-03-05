@@ -5,6 +5,8 @@
     <div class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
+        <!-- 放置多页标签 -->
+        <tags-view />
       </div>
       <app-main />
     </div>
