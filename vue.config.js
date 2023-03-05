@@ -11,6 +11,34 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 // 设置端口
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
+let cdn = { css: [], js: [] }
+// 通过环境变量 来区分是否使用cdn
+const isProd = process.env.Node_ENV === 'production'
+let externals = {}
+// 生产环境下
+if (isProd) {
+  // 要排除的包名，key是包名,value是实际引入的CDN的包的全局变量名
+  externals = {
+    'vue': 'Vue',
+    'element-ui': 'ELEMENT',
+    'xlsx': 'XLSX' }
+  // 配置CDN
+  cdn = {
+    css: [
+      // element-ui css
+      'https://unpkg.com/element-ui/lib/theme-chalk/index.css' // 样式表
+    ],
+    js: [
+      // vue must at first!
+      'https://unpkg.com/vue/dist/vue.js', // vuejs
+      // element-ui js
+      'https://unpkg.com/element-ui/lib/index.js', // elementUI
+      'https://cdn.jsdelivr.net/npm/xlsx@0.16.6/dist/jszip.min.js',
+      'https://cdn.jsdelivr.net/npm/xlsx@0.16.6/dist/xlsx.full.min.js'
+    ]
+  }
+}
+
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
 
@@ -38,6 +66,7 @@ module.exports = {
     }
     // before: require('./mock/mock-server.js')会导致代理异常
   },
+  // 配置webpack属性
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
@@ -46,7 +75,9 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+    externals
+
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
@@ -59,7 +90,11 @@ module.exports = {
         include: 'initial'
       }
     ])
-
+    // 注入cdn变量
+    config.plugin('html').tap(args => {
+      args[0].cdn = cdn
+      return args
+    })
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
 
