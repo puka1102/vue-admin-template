@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      defaultImg: require('@/assets/common/head.jpg') // 防止路径出错
+      defaultImg: require('@/assets/common/bigUserHeader.png') // 防止路径出错
     }
   },
   computed: {

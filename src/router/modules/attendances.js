@@ -1,16 +1,37 @@
+
 import Layout from '@/layout'
 
-export default {
+const attendRouter = {
   path: '/attendances',
-  name: 'attendances',
   component: Layout,
-  // 配置二级路由组件
+  name: 'attendances',
   children: [
-    { path: '',
+    {
+      path: '',
       component: () => import('@/views/attendances'),
+      name: 'attendances',
       meta: {
         title: '考勤',
-        icon: 'skill'
-      }} // 左侧导航会读取这里的title作为显示菜单名称
+        icon: 'excel' }
+    },
+    {
+      path: 'archiving',
+      component: () => import('@/views/attendances/historical'),
+      name: 'archiving',
+      hidden: true,
+      meta: {
+        title: '归档'
+      }
+    },
+    {
+      path: 'report/:month',
+      component: () => import('@/views/attendances/report'),
+      name: 'reports',
+      hidden: true,
+      meta: {
+        title: '报表'
+      }
+    }
   ]
 }
+export default attendRouter

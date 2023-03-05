@@ -1,16 +1,50 @@
+
 import Layout from '@/layout'
-// 每个子模块 外层都是layout,组件位于layout的二级路由里面
+
 export default {
-  path: '/social',
+  path: '/social_securitys',
   component: Layout,
   name: 'social_securitys',
-  // 配置二级路由组件
   children: [
-    { path: '',
+    {
+      path: '',
       component: () => import('@/views/social'),
+      name: 'social_securitys',
       meta: {
         title: '社保',
         icon: 'table'
-      }} // 左侧导航会读取这里的title作为显示菜单名称
+
+      }
+    },
+    // 报表
+    {
+      path: 'detail/:id',
+      hidden: true,
+      component: () => import('@/views/social/detail'),
+      name: 'socialDetail',
+      meta: {
+        title: '社保'
+      }
+    },
+    // 历史归档
+    {
+      path: 'historicalArchiving',
+      hidden: true,
+      component: () => import('@/views/social/historical'),
+      name: 'socialHistorical',
+      meta: {
+        title: '历史归档'
+      }
+    },
+    // 月报表
+    {
+      path: 'monthStatement',
+      component: () => import('@/views/social/month'),
+      name: 'socialMonthStatement',
+      hidden: true,
+      meta: {
+        title: '当月报表'
+      }
+    }
   ]
 }
