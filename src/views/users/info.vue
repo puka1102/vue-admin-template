@@ -69,13 +69,11 @@ export default {
       this.$router.back(-1)
     },
     async getUserInfo() {
-      this.loading = true
       const detailData = await getUserDetailById(this.userId)
       const personData = await getPersonalDetail(this.userId)
       detailData.sex = personData.sex
       detailData.dateOfBirth = personData.dateOfBirth
       this.myInfo = detailData
-      this.loading = false
     }
   }
 }

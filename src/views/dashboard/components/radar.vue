@@ -1,5 +1,5 @@
 <template>
-  <div id="radar" class="radar-echart" />
+  <div id="radar" ref="radar" class="radar-echart" />
 </template>
 <script>
 import * as echarts from 'echarts/core'
@@ -51,13 +51,23 @@ export default {
       ]
     }
     option && myChart.setOption(option)
+    // 在mounted中绑定resize
+    window.addEventListener('resize', function() {
+      myChart.resize()
+    })
+  },
+  beforeDestroy() {
+    // 在beforeDestroy中解绑
+    window.removeEventListener('resize')
   }
-
 }
 </script>
 <style scoped>
 .radar-echart {
-    width: 600px;
-    height: 400px;
+	display: flex;
+	justify-content: center;
+  width: 100%;
+  height: 400px;
+
 }
 </style>

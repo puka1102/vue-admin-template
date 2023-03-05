@@ -124,7 +124,6 @@ export default {
   },
   methods: {
     async init() {
-      debugger
       const data = await getApprovalsDetail(this.selectedId)
       this.ruleForm = data
       this.ruleForm.data = JSON.parse(this.ruleForm.procData)

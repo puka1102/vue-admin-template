@@ -73,10 +73,10 @@
             <span>流程申请</span>
           </div>
           <div class="sideNav">
-            <el-button class="sideBtn">加班离职</el-button>
+            <el-button class="sideBtn" @click="resign">加班离职</el-button>
             <el-button class="sideBtn">请假调休</el-button>
-            <el-button class="sideBtn">审批列表</el-button>
-            <el-button class="sideBtn">我的信息</el-button>
+            <el-button class="sideBtn" @click="$router.push('/users/approvals')">审批列表</el-button>
+            <el-button class="sideBtn" @click="$router.push('/users/info')">我的信息</el-button>
           </div>
         </el-card>
 
@@ -118,6 +118,7 @@
         </el-card>
       </el-col>
     </el-row>
+    <resignation :show-resign-dialog.sync="showResignDialog" :user-id="userId" />
   </div>
 </template>
 
@@ -125,20 +126,27 @@
 import { mapGetters } from 'vuex'
 import workCalendar from './components/work-calendar.vue'
 import Radar from './components/radar.vue'
+import resignation from './components/resignation.vue'
 export default {
   name: 'Dashboard',
   components: {
-    workCalendar, Radar
+    workCalendar, Radar, resignation
   },
   data() {
     return {
-      defaultImg: require('@/assets/common/bigUserHeader.png')
+      defaultImg: require('@/assets/common/bigUserHeader.png'),
+      showResignDialog: false
     }
   },
   computed: {
     ...mapGetters([
-      'name', 'staffPhoto', 'userInfo'
+      'name', 'staffPhoto', 'userInfo', 'userId'
     ])
+  },
+  methods: {
+    resign() {
+      this.showResignDialog = true
+    }
   }
 
 }
